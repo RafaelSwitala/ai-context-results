@@ -1,0 +1,2 @@
+Alle Agenten müssen in seperaten Ordnern arbeiten. Beim Versuch, diese gemeinsam in ein FileSpace zu bringen, wurde ab dem 2. KI-Agenten abgeschaut was die anderen so machen und es wurde kopiert.
+Um das zu beheben, habe ich jedem KI-Agenten ein seperates Projekt erstellt, wo nur er rein schauen darf.
