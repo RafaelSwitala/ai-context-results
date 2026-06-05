@@ -44,3 +44,9 @@ Um das zu beheben, habe ich jedem KI-Agenten ein seperates Projekt erstellt, wo 
 - Cursor ergänzt [14] durch Excluded From Migration (With Reason) 
 - Cursor ergänzt [15] durch Inputs For Later Phases (No Rediscovery) und Known Build/Test Notes
 - Cursor ergänzt [16] durch Self-Validation (VAL-P1)
+
+
+
+
+# Phase 2
+- Cursor als Basis verwendet, Ideen von Codex und Copilot ergänzt. (siehe C:\Users\rafaelswitala\Desktop\Empfehlungen\Phase 2\WhatIDid.md)

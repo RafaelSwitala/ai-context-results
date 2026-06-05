@@ -1,0 +1,168 @@
+import java.text.SimpleDateFormat
+
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.11.0'
+        classpath 'com.google.gms:google-services:4.4.3'
+    }
+}
+
+
+apply plugin: 'com.android.application'
+
+repositories {
+    mavenCentral()
+    google()
+}
+
+static def buildTime(){
+    def df = new SimpleDateFormat("yyyyMMddHH")
+    return Integer.parseInt(df.format(new Date()))
+}
+
+
+def keyProperties = new Properties()
+def propertiesFile = rootProject.file('local.properties')
+if (propertiesFile.exists()) {
+    keyProperties.load(new FileInputStream(propertiesFile))
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+        google()
+    }
+}
+
+android {
+    compileSdkVersion = 35
+    flavorDimensions = ["default"]
+
+    bundle {
+        language {
+            // Disables language splitting (upload all languages in google play )
+            enableSplit = false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions { //not compilable
+        exclude 'META-INF/com.android.tools/proguard/coroutines.pro'
+    }
+
+    defaultConfig {
+        applicationId "de.onlinesoftwareag.boa.mobilebrowser4android"
+        minSdkVersion 26
+        targetSdkVersion 35
+        multiDexEnabled true
+        versionCode buildTime()
+        versionName '25.11.0'
+
+        archivesBaseName = "mobilebrowser_" + versionName.replace(".", "_")
+
+        buildConfigField "Boolean", "USE_ENGLISH", "false"
+        buildConfigField "Boolean", "IS_MULTILINGUAL", "true"
+    }
+
+    signingConfigs {
+        release {
+            def storeFile = keyProperties.getProperty("storeFile")
+            if (storeFile != null) {
+                storeFile file(storeFile)
+                storePassword keyProperties.getProperty("storePassword")
+                keyAlias keyProperties.getProperty("keyAlias")
+                keyPassword keyProperties.getProperty("keyPassword")
+            }
+        }
+    }
+
+    buildTypes {
+       release {
+            minifyEnabled false
+            if (keyProperties.getProperty("storeFile") != null) {
+                signingConfig signingConfigs.release
+            }
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        mobilebrowser_default {
+            applicationId "de.onlinesoftwareag.boa.mobilebrowser4android.default"
+        }
+        mobilebrowser { /* douglas */
+            applicationId "de.onlinesoftwareag.boa.mobilebrowser4android"
+            buildConfigField "Boolean", "IS_MULTILINGUAL", "false"
+        }
+        moebelheinrich {
+            applicationId "de.onlinesoftwareag.boa.mobilebrowser4android.moebelheinrich"
+            buildConfigField "Boolean", "IS_MULTILINGUAL", "false"
+        }
+        douglasen {
+            applicationId "de.onlinesoftwareag.boa.mobilebrowser4android.douglas.en"
+            buildConfigField "Boolean", "USE_ENGLISH", "true"
+            buildConfigField "Boolean", "IS_MULTILINGUAL", "false"
+        }
+        bauhaus {
+            applicationId "de.onlinesoftwareag.boa.mobilebrowser4android.bauhaus"
+            buildConfigField "Boolean", "IS_MULTILINGUAL", "false"
+        }
+        superstore {
+            applicationId "de.onlinesoftwareag.boa.mobilebrowser4android.superstore"
+        }
+    }
+
+    namespace 'de.onlinesoftwareag.boa.mobilebrowser4android'
+}
+
+
+dependencies {
+
+    def androidx = "1.7.1" //https://developer.android.com/jetpack/androidx/migrate
+    def androidxMaterial = "1.10.0"
+    def lifecycle_version = "2.9.1" //https://developer.android.com/jetpack/androidx/releases/lifecycle
+
+    implementation "androidx.appcompat:appcompat:$androidx"
+    implementation "androidx.legacy:legacy-support-v13:1.0.0"
+    implementation "androidx.preference:preference:1.2.1"
+
+    implementation "com.google.android.material:material:$androidxMaterial"
+
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.google.code.gson:gson:2.13.1'
+
+    // annotationProcessor: alternately - if using Java8, use the following instead of lifecycle-compiler
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    // ProcessLifecycleOwner provides a lifecycle for the whole application process
+    implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
+
+    /* 2023-11-22 #16# replace com.google.android.gms:play-services-vision with bundled com.google.mlkit:barcode-scanning [for bauhaus] */
+    /*implementation 'com.google.android.gms:play-services-vision:18.0.0'*/
+    //https://developers.google.com/ml-kit/tips/installation-paths?hl=de#how_to_update_models
+    //https://developers.google.com/ml-kit/vision/barcode-scanning/android?hl=de
+    //https://developers.google.com/ml-kit/release-notes?hl=de
+    implementation "com.google.mlkit:barcode-scanning:17.3.0"
+
+    //https://developer.android.com/training/camerax/extensions-api#java
+    //The CameraX Extensions API is implemented in the camera-extensions library.
+    //The extensions depend on the CameraX core modules (core, camera2, lifecycle).
+    def camerax_version = '1.4.2'
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-view:$camerax_version"
+    implementation "androidx.camera:camera-extensions:$camerax_version"
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'androidx.test:core:1.7.0'
+    testImplementation 'org.robolectric:robolectric:4.14.1'
+}
+
+apply plugin: 'com.google.gms.google-services'
