@@ -1,2 +1,0 @@
-# ai-context-results
-Bachelorarbeit

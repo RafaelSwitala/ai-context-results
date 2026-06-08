@@ -1,0 +1,13 @@
+Starting project at C:\Users\rafaelswitala\Desktop\DF\Codex\rn-e-mobilebrowser
+Starting Metro Bundler
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Web .\index.ts ▓▓▓▓▓▓▓▓▓▓░░░░░░ 64.8% (33/41)
+Web .\index.ts ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.1% (230/231)
+Web Bundled 7263ms index.ts (235 modules)
+ LOG  [web] Logs will appear in the browser console
+Web .\index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+Web Bundled 29ms index.ts (1 module)
+ LOG  [web] Logs will appear in the browser console
+› Detected a change in babel.config.js. Restart the server to see the new results. You may need to clear the bundler cache with the --clear flag for your changes to take effect.
+› Detected a change in babel.config.js. Restart the server to see the new results. You may need to clear the bundler cache with the --clear flag for your changes to take effect.
